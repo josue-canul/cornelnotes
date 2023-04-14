@@ -28,7 +28,6 @@ class UserFactory extends Factory
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
             'ControlNumber' => $control,
             'Ing' => fake()->randomElement(['ISC', 'II', 'IE', 'IEM', 'IER']),
-            'Notas' => fake()->randomNumber(1,1),
             'remember_token' => Str::random(10),
         ];
     }

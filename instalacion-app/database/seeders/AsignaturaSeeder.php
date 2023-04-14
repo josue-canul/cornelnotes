@@ -4,8 +4,9 @@ namespace Database\Seeders;
 
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
+use App\Models\Asignatura;
 
-class RecordatorioSeeder extends Seeder
+class AsignaturaSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -15,5 +16,8 @@ class RecordatorioSeeder extends Seeder
     public function run()
     {
         //
+        Asignatura::factory()
+        ->count(10)
+        ->create();
     }
 }
