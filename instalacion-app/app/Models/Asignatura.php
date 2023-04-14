@@ -17,4 +17,7 @@ class Asignatura extends Model
     public function Temas(){
         return $this->hasMany(Temas::class);
     }
+    public function Recordatorios(){
+        return $this->hasMany(Recordatorios::class);
+    }
 }
