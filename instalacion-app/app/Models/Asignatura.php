@@ -14,4 +14,7 @@ class Asignatura extends Model
     public function User(){
         return $this->belongsTo(User::class);
     }
+    public function Temas(){
+        return $this->hasMany(Temas::class);
+    }
 }
