@@ -26,7 +26,7 @@ class NotaFactory extends Factory
             'titulo'=>fake()->word(),
             'resumen'=>fake()->word(),
             'p_clave'=>fake()->word(),
-            'apunte'=>fake()->word(),
+            'apunte'=>fake()->text(),
             'tema_id' => $tema->id,
             'user_id' => $user->id,
             
