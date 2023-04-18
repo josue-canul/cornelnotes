@@ -3,7 +3,7 @@
 namespace Database\Factories;
 
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\Asignatura;
+use App\Models\User;
 use App\Models\Tema;
 
 /**
@@ -19,14 +19,14 @@ class RecordatorioFactory extends Factory
     public function definition()
     {
         $tema = Tema::inRandomOrder()->first();
-        $asignatura = Asignatura::inRandomOrder()->first();
+        $user = User::inRandomOrder()->first();
         return [
 
             'importancia'=>fake()->word(),
             'recordar'=>fake()->word(),
 
             'tema_id' => $tema->id,
-            'asignatura_id' => $asignatura->id,
+            'user_id' => $user->id,
             //
         ];
     }

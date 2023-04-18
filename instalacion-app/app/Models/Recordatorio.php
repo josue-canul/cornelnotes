@@ -12,7 +12,7 @@ class Recordatorio extends Model
     public function Tema(){
         return $this->belongsTo(Temas::class);
     }
-    public function Asignatura(){
-        return $this->belongsTo(Asignatura::class);
+    public function User(){
+        return $this->belongsTo(User::class);
     }
 }

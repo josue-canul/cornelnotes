@@ -23,8 +23,8 @@ return new class extends Migration
             $table->foreignId('Tema_id')
                     ->constrained('Temas');
 
-            $table->foreignId('Asignatura_id')
-                    ->constrained('Asignaturas');
+            $table->foreignId('user_id')
+                    ->constrained('users');
             $table->timestamps();
 
         });

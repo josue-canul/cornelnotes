@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Nota;
 use Illuminate\Http\Request;
+use App\Models\Tema;
 
 class NotaController extends Controller
 {
@@ -29,6 +30,8 @@ class NotaController extends Controller
      */
     public function create()
     {
+        return view('notas.create');
+        
         //
     }
 
@@ -40,7 +43,21 @@ class NotaController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $userid=auth()->id();
+        $tema=Tema::where('name',$request->temi)
+            ->first();
+
+        $notal=new Nota;
+        $notal->titulo=$request->titulo;
+        $notal->resumen=$request->resumen;
+        $notal->p_clave=$request->p_clave;
+        $notal->apunte=$request->apunte;
+        $notal->User_id=$userid;
+        $notal->Tema_id=$tema->id;
+
+        $notal->save();
+    
+        return redirect()->route('notas.index');
     }
 
     /**
@@ -49,8 +66,11 @@ class NotaController extends Controller
      * @param  \App\Models\Nota  $nota
      * @return \Illuminate\Http\Response
      */
-    public function show(Nota $nota)
+    public function show($id)
     {
+        $notas= Nota::find($id);
+
+        return view('notas.show',compact('notas'));
         //
     }
 
@@ -60,8 +80,11 @@ class NotaController extends Controller
      * @param  \App\Models\Nota  $nota
      * @return \Illuminate\Http\Response
      */
-    public function edit(Nota $nota)
+    public function edit($id)
     {
+        $notas= Nota::find($id);
+
+        return view('notas.edit',compact('notas'));
         //
     }
 
@@ -72,8 +95,17 @@ class NotaController extends Controller
      * @param  \App\Models\Nota  $nota
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Nota $nota)
+    public function update(Request $request, $id)
     {
+        $notaj=Nota::find($id);
+        $user_id=auth()->id();
+
+        $notaj->titulo=$request->titulo;
+        $notaj->resumen=$request->resumen;
+        $notaj->p_clave=$request->p_clave;
+        $notaj->apunte=$request->apunte;
+        $notaj->save();
+        return redirect()->route('notas.index')->with('actualizacion correcta');
         //
     }
 
@@ -83,8 +115,11 @@ class NotaController extends Controller
      * @param  \App\Models\Nota  $nota
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Nota $nota)
+    public function destroy($id)
     {
+        $notad=Nota::find($id);
+        $notad->delete();
+        return redirect()->route('notas.index');
         //
     }
 }
