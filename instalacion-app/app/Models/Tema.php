@@ -8,13 +8,13 @@ use Illuminate\Database\Eloquent\Model;
 class Tema extends Model
 {
     use HasFactory;
-    public function Asignatura(){
+    public function Asignaturas(){
         return $this->belongsTo(Asignatura::class);
     }
     public function Notas(){
-        return $this->hasMany(Notas::class);
+        return $this->hasMany(Nota::class);
     }
     public function Recordatorios(){
-        return $this->hasMany(Recordatorios::class);
+        return $this->hasMany(Recordatorio::class);
     }
 }

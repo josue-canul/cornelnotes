@@ -43,12 +43,12 @@ class User extends Authenticatable
     ];
 
     public function Asignaturas(){
-        return $this->hasMany(Asignaturas::class);
+        return $this->hasMany(Asignatura::class);
     }
     public function Notas(){
-        return $this->hasMany(Notas::class);
+        return $this->hasMany(Nota::class);
     }
     public function Recordatorios(){
-        return $this->hasMany(Recordatorios::class);
+        return $this->hasMany(Recordatorio::class);
     }
 }

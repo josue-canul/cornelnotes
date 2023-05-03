@@ -11,11 +11,11 @@ class Asignatura extends Model
 
     //relacion inversa
 
-    public function User(){
+    public function Users(){
         return $this->belongsTo(User::class);
     }
     public function Temas(){
-        return $this->hasMany(Temas::class);
+        return $this->hasMany(Tema::class);
     }
     
 }
