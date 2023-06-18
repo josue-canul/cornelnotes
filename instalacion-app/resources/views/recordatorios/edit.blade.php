@@ -3,7 +3,7 @@
     <div>
         @method("PATCH")
             <h3>importancia</h3>
-                <input type="text" name="importancia" id="importancia" value="{{$recordatorioss ->importancia}}">
+                <input type="text" name="importancia" id="importancia" value="{{$recordatorios ->importancia}}">
 
             <h3>recordar</h3>
                 <input type="text" name="recordar" id="recordar" value="{{$recordatorios ->recordar}}">

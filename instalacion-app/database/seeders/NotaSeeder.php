@@ -16,7 +16,7 @@ class NotaSeeder extends Seeder
     public function run()
     {
         Nota::factory()
-        ->count(5)
+        ->count(200)
         ->create();
         //
     }
