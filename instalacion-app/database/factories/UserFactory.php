@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Carrera;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 
@@ -17,17 +18,14 @@ class UserFactory extends Factory
      */
     public function definition()
     {
-        $Nomb= fake()->name();
-        $first= explode(' ',$Nomb);
-        $prin = fake()->randomElement(['1807', '1907', '2007', '2107', '2207']);
-        $fina = fake()->unique()->randomNumber(4, true);
-        $control = $prin.$fina;
+        $carrera = Carrera::inRandomOrder()->first();
         return [
-            'name' => $Nomb,
-            'email' => $first[0].'.'.$control."@itsmotul.edu.mx",
+            'nombre' => fake()->firstName(),
+            'apellido' => fake()->lastName(),
+            'matricula' => fake()->randomElement($array = ['180700', '190700', '200700']) . fake()->randomNumber(2, true),
+            'email' => fake()->unique()->safeEmail(),
             'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-            'ControlNumber' => $control,
-            'Ing' => fake()->randomElement(['ISC', 'II', 'IE', 'IEM', 'IER']),
+            'id_carrera' => $carrera->id,
             'remember_token' => Str::random(10),
         ];
     }

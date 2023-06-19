@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\Asignatura;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Tema>
@@ -19,10 +19,8 @@ class TemaFactory extends Factory
     {
         $asignatura = Asignatura::inRandomOrder()->first();
         return [
-
-            'name' =>fake()->word(),
-            'asignatura_id' => $asignatura->id,
-            //
+            'tema' => fake()->word(),
+            'id_asignatura' => $asignatura->id,
         ];
     }
 }

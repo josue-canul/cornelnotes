@@ -13,20 +13,9 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('notas', function (Blueprint $table) {
+        Schema::create('carreras', function (Blueprint $table) {
             $table->id();
-
-
-            $table->string('titulo');
-            $table->string('resumen');
-            $table->string('p_clave');
-            $table->string('apunte');
-
-            $table->foreignId('Tema_id')
-                    ->constrained('Temas');
-
-            $table->foreignId('User_id')
-                    ->constrained('Users');
+            $table->string('carrera');
             $table->timestamps();
         });
     }
@@ -38,6 +27,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('notas');
+        Schema::dropIfExists('carreras');
     }
 };

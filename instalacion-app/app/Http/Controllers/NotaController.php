@@ -2,124 +2,110 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Asignatura;
 use App\Models\Nota;
-use Illuminate\Http\Request;
 use App\Models\Tema;
+use Illuminate\Http\Request;
 
 class NotaController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $userid=auth()->id();
-        //dole dos puntos consuta
-        $notaf=Nota::where('User_id',$userid)->get();
 
-        return view('notas.index',compact('notaf'));
-        //
+    public function index(Request $request)
+    {
+        $user_id = auth()->id();
+        $buscar = $request->get('buscador');
+        $asignaturas = Asignatura::where('id_carrera', auth()->user()->id_carrera)->get();
+        if ($buscar) {
+            $notas = Nota::where('id_usuario', $user_id)
+                ->whereHas('temas.asignaturas', function ($query) use ($buscar) {
+                    $query->where('asignatura', 'like', '%' . $buscar . '%');
+                })
+                ->get();
+        } else {
+            $buscar = null;
+            $notas = Nota::where('id_usuario', $user_id)->get();
+        }
+        return view('notas.index')->with([
+            'notas' => $notas,
+            'asignaturas' => $asignaturas,
+        ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('notas.create');
-        
-        //
+        $asignaturas = Asignatura::where('id_carrera', auth()->user()->id_carrera)->get();
+        $temas = Tema::whereIn('id_asignatura', $asignaturas->pluck('id'))->get();
+        return view('notas.crear', compact('temas', 'asignaturas'));
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $userid=auth()->id();
-        $tema=Tema::where('name',$request->temi)
-            ->first();
+        $request->validate([
+            'tema' => ['required', 'numeric', 'not_in:0'], // Requerido, numérico y debe ser mayor a 0
+            'titulo' => ['required'],
+            'contenido' => ['required', 'min:10'],
+            'p_clave' => ['required'],
+            'resumen' => ['required', 'min:10'],
+        ]);
 
-        $notal=new Nota;
-        $notal->titulo=$request->titulo;
-        $notal->resumen=$request->resumen;
-        $notal->p_clave=$request->p_clave;
-        $notal->apunte=$request->apunte;
-        $notal->User_id=$userid;
-        $notal->Tema_id=$tema->id;
+        $user_id = auth()->id();
 
-        $notal->save();
-    
-        return redirect()->route('notas.index');
+        $nota = new Nota;
+        $nota->titulo = $request->titulo;
+        $nota->contenido = $request->contenido;
+        $nota->p_clave = $request->p_clave;
+        $nota->resumen = $request->resumen;
+        $nota->id_usuario = $user_id;
+        $nota->id_tema = $request->tema;
+        $nota->save();
+        return redirect('notas')->with('flash_message', 'Nota Addedd!');
     }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $notas= Nota::find($id);
-
-        return view('notas.show',compact('notas'));
-        //
+        $nota = Nota::find($id);
+        $tema = Tema::where('id', $nota->id_tema)->first();
+        $asignatura = Asignatura::where('id', $tema->id_asignatura)->first();
+        return view('notas.mostrar')->with([
+            'nota' => $nota,
+            'tema' => $tema,
+            'asignatura' => $asignatura
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $notas= Nota::find($id);
-
-        return view('notas.edit',compact('notas'));
-        //
+        $nota = Nota::find($id);
+        $tema = Tema::where('id', $nota->id_tema)->first();
+        $asignatura = Asignatura::where('id', $tema->id_asignatura)->first();
+        return view('notas.editar')->with([
+            'nota' => $nota,
+            'tema' => $tema,
+            'asignatura' => $asignatura,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $notaj=Nota::find($id);
-        $user_id=auth()->id();
+        $request->validate([
+            'titulo' => ['required'],
+            'contenido' => ['required', 'min:10'],
+            'p_clave' => ['required'],
+            'resumen' => ['required', 'min:10'],
+        ]);
 
-        $notaj->titulo=$request->titulo;
-        $notaj->resumen=$request->resumen;
-        $notaj->p_clave=$request->p_clave;
-        $notaj->apunte=$request->apunte;
-        $notaj->save();
-        return redirect()->route('notas.index')->with('actualizacion correcta');
-        //
+        $nota = Nota::find($id);
+
+        $nota->titulo = $request->titulo;
+        $nota->contenido = $request->contenido;
+        $nota->p_clave = $request->p_clave;
+        $nota->resumen = $request->resumen;
+        $nota->save();
+        return redirect('notas')->with('flash_message', 'Nota Updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Nota  $nota
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $notad=Nota::find($id);
-        $notad->delete();
-        return redirect()->route('notas.index');
-        //
+        Nota::destroy($id);
+        return redirect('notas')->with('flash_message', 'Nota deleted!');
     }
 }

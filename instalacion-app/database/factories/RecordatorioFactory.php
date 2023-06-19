@@ -2,9 +2,8 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
 use App\Models\User;
-use App\Models\Tema;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Recordatorio>
@@ -18,16 +17,14 @@ class RecordatorioFactory extends Factory
      */
     public function definition()
     {
-        $tema = Tema::inRandomOrder()->first();
         $user = User::inRandomOrder()->first();
         return [
+            'titulo' => fake()->word(),
+            'contenido' => fake()->paragraph(),
+            'importancia' => fake()->word(),
+            'fecha' => fake()->dateTime(),
 
-            'importancia'=>fake()->word(),
-            'recordar'=>fake()->word(),
-
-            'tema_id' => $tema->id,
-            'user_id' => $user->id,
-            //
+            'id_usuario' => $user->id,
         ];
     }
 }

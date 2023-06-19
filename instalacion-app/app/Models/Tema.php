@@ -8,13 +8,16 @@ use Illuminate\Database\Eloquent\Model;
 class Tema extends Model
 {
     use HasFactory;
-    public function Asignaturas(){
-        return $this->belongsTo(Asignatura::class);
+
+    public function asignaturas()
+    {
+        return $this->belongsTo(Asignatura::class, 'id_asignatura');
     }
-    public function Notas(){
-        return $this->hasMany(Nota::class);
+
+    public function notas()
+    {
+        return $this->hasMany(Nota::class, 'id_tema');
     }
-    public function Recordatorios(){
-        return $this->hasMany(Recordatorio::class);
-    }
+
+    protected $fillable = ['tema', 'id_asignatura'];
 }

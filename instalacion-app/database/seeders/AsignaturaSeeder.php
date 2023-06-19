@@ -2,9 +2,12 @@
 
 namespace Database\Seeders;
 
+use App\Models\Asignatura;
+use App\Models\Carrera;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
-use App\Models\Asignatura;
+
+use function GuzzleHttp\Promise\all;
 
 class AsignaturaSeeder extends Seeder
 {
@@ -15,9 +18,13 @@ class AsignaturaSeeder extends Seeder
      */
     public function run()
     {
-        //
-        Asignatura::factory()
-        ->count(10)
-        ->create();
+        $carreras = Carrera::all();
+        foreach ($carreras as $carrera) {
+            Asignatura::factory()
+                ->count(6)
+                ->create([
+                    'id_carrera' => $carrera
+                ]);
+        }
     }
 }

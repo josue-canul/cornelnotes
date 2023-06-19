@@ -2,8 +2,8 @@
 
 namespace Database\Factories;
 
+use App\Models\Carrera;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Asignatura>
@@ -17,12 +17,10 @@ class AsignaturaFactory extends Factory
      */
     public function definition()
     {
-        $user = User::inRandomOrder()->first();
+        $carrera = Carrera::inRandomOrder()->first();
         return [
-            'name' =>fake()->word(),
-            'user_id' => $user->id,
-            
-            //
+            'asignatura' => fake()->word(),
+            'id_carrera' => $carrera->id,
         ];
     }
 }

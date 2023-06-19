@@ -9,10 +9,10 @@ class Recordatorio extends Model
 {
     use HasFactory;
 
-    public function Temas(){
-        return $this->belongsTo(Tema::class);
+    public function users() {
+        return $this->belongsTo(user::class,'id_usuario');
     }
-    public function User(){
-        return $this->belongsTo(User::class);
-    }
+
+    protected $fillable = ['titulo', 'contenido', 'importancia', 'fecha', 'id_usuario'];
+
 }

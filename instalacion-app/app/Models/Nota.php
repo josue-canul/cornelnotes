@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Model;
 class Nota extends Model
 {
     use HasFactory;
-    public function Temas(){
-        return $this->belongsTo(Tema::class);
+
+    public function users() {
+        return $this->belongsTo(User::class,'id_usuario');
     }
-    public function User(){
-        return $this->belongsTo(User::class);
+
+    public function temas() {
+        return $this->belongsTo(Tema::class,'id_tema');
     }
+    protected $fillable = ['titulo', 'contenido', 'p_clave', 'resumen','id_usuario', 'id_tema'];
 
 }

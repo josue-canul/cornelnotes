@@ -4,119 +4,92 @@ namespace App\Http\Controllers;
 
 use App\Models\Recordatorio;
 use Illuminate\Http\Request;
-use App\Models\Tema;
-
 
 class RecordatorioController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        $userid=auth()->id();
-        //dole dos puntos consulta
-        $recordatoriof=Recordatorio::where('User_id',$userid)->get();
 
-        return view('recordatorios.index',compact('recordatoriof'));
-        //
+    public function index(Request $request)
+    {
+        $user_id = auth()->id();
+
+        $buscar = $request->get('buscador');
+
+        if ($buscar) {
+            $recordatorios = Recordatorio::where('id_usuario', $user_id)
+                ->Where('titulo', 'like', '%'.$buscar.'%')->get();
+        } else {
+            $buscar = null;
+            $recordatorios = Recordatorio::where('id_usuario', $user_id)->get();
+        }
+
+        return view('recordatorios.index')->with('recordatorios', $recordatorios);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
     public function create()
     {
-        return view('recordatorios.create');
-        //
+        return view('recordatorios.crear');
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $userid=auth()->id();
-        $tema=Tema::where('name',$request->temi)
-            ->first();
+        $request->validate([
+            'titulo' => ['required'],
+            'contenido' => ['required', 'min:10'],
+            'importancia' => ['required'],
+            'fecha' => ['required']
+        ]);
 
-        $recordatoriol=new Recordatorio;
-        $recordatoriol->importancia=$request->importancia;
-        $recordatoriol->recordar=$request->recordar;
-        $recordatoriol->User_id=$userid;
-        $recordatoriol->Tema_id=$tema->id;
+        $user_id = auth()->id();
 
-        $recordatoriol->save();
-    
-        return redirect()->route('recordatorios.index');
-        //
+        $recordatorio = new Recordatorio;
+        $recordatorio->titulo = $request->titulo;
+        $recordatorio->contenido = $request->contenido;
+        $recordatorio->importancia = $request->importancia;
+        $recordatorio->fecha = $request->fecha;
+        $recordatorio->id_usuario = $user_id;
+        $recordatorio->save();
+        return redirect('recordatorios')->with('flash_message', 'Recordatorio Addedd!');
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Recordatorio  $recordatorio
-     * @return \Illuminate\Http\Response
-     */
     public function show($id)
     {
-        $recordatorios= Recordatorio::find($id);
+        $recordatorio = Recordatorio::find($id);
 
-        return view('recordatorios.show',compact('recordatorios'));
-        //
+        return view('recordatorios.mostrar')->with([
+            'recordatorio' => $recordatorio,
+        ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Recordatorio  $recordatorio
-     * @return \Illuminate\Http\Response
-     */
     public function edit($id)
     {
-        $recordatorios= Recordatorio::find($id);
-
-        return view('recordatorios.edit',compact('recordatorios'));
-        //
+        $recordatorio = Recordatorio::find($id);
+        return view('recordatorios.editar')->with([
+            'recordatorio' => $recordatorio,
+        ]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Recordatorio  $recordatorio
-     * @return \Illuminate\Http\Response
-     */
     public function update(Request $request, $id)
     {
-        $recordatorioj=Recordatorio::find($id);
-        $user_id=auth()->id();
+        $request->validate([
+            'titulo' => ['required'],
+            'contenido' => ['required', 'min:10'],
+            'importancia' => ['required'],
+            'fecha' => ['required']
+        ]);
 
-        $recordatoriol->importancia=$request->importancia;
-        $recordatoriol->recordar=$request->recordar;
-        $recordarorioj->save();
-        return redirect()->route('recordatorios.index')->with('actualizacion correcta');
-        //
+        $recordatorio = Recordatorio::find($id);
+
+        $recordatorio->titulo = $request->titulo;
+        $recordatorio->contenido = $request->contenido;
+        $recordatorio->importancia = $request->importancia;
+        $recordatorio->fecha = $request->fecha;
+        $recordatorio->save();
+        return redirect('recordatorios')->with('flash_message', 'Recordatorio Updated!');
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Recordatorio  $recordatorio
-     * @return \Illuminate\Http\Response
-     */
     public function destroy($id)
     {
-        $recordatoriod=Recordatorio::find($id);
-        $recordatoriod->delete();
-        return redirect()->route('recordatorios.index');
-        //
+        Recordatorio::destroy($id);
+        return redirect('recordatorios')->with('flash_message', 'Recordatorio deleted!');
     }
 }

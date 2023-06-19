@@ -9,13 +9,13 @@ class Asignatura extends Model
 {
     use HasFactory;
 
-    //relacion inversa
+    public function carreras() {
+        return $this->belongsTo(Carrera::class,'id_carrera');
+    }
 
-    public function Users(){
-        return $this->belongsTo(User::class);
+    public function temas() {
+        return $this->hasMany(Tema::class,'id_tema');
     }
-    public function Temas(){
-        return $this->hasMany(Tema::class);
-    }
-    
+
+    protected $fillable = ['asignatura', 'id_carrera'];
 }

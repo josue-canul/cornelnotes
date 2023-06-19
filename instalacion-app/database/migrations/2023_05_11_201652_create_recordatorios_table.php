@@ -13,15 +13,16 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('temas', function (Blueprint $table) {
+        Schema::create('recordatorios', function (Blueprint $table) {
             $table->id();
+            $table->string('titulo')->nullable();
+            $table->text('contenido')->nullable();
+            $table->string('importancia');
+            $table->dateTime('fecha');
 
-            $table->string('name');
-
-            $table->foreignId('asignatura_id')
-                    ->constrained('asignaturas');
-
-
+            $table->foreignId('id_usuario')
+                ->constrained('users')
+                ->cascadeOnUpdate();
             $table->timestamps();
         });
     }
@@ -33,6 +34,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('temas');
+        Schema::dropIfExists('recordatorios');
     }
 };

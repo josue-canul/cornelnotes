@@ -13,21 +13,14 @@ return new class extends Migration
      */
     public function up()
     {
-        Schema::create('asignaturas', function (Blueprint $table) {
+        Schema::create('temas', function (Blueprint $table) {
             $table->id();
+            $table->string('tema');
 
-            //
-            $table->string('name');
-
-
-            //relacion con user
-            $table->foreignId('user_id')
-                    ->constrained('users');
-
-
-
+            $table->foreignId('id_asignatura')
+                ->constrained('asignaturas')
+                ->cascadeOnUpdate();
             $table->timestamps();
-
         });
     }
 
@@ -38,6 +31,6 @@ return new class extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('asignaturas');
+        Schema::dropIfExists('temas');
     }
 };

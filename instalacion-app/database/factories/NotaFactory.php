@@ -2,9 +2,9 @@
 
 namespace Database\Factories;
 
-use Illuminate\Database\Eloquent\Factories\Factory;
-use App\Models\User;
 use App\Models\Tema;
+use App\Models\User;
+use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\Nota>
@@ -18,20 +18,16 @@ class NotaFactory extends Factory
      */
     public function definition()
     {
-        $tema = Tema::inRandomOrder()->first();
         $user = User::inRandomOrder()->first();
+        $tema = Tema::inRandomOrder()->first();
         return [
+            'titulo' => fake()->word(),
+            'contenido' => fake()->paragraph(),
+            'p_clave' => implode(',', fake()->words()),
+            'resumen' => fake()->paragraph(),
 
-
-            'titulo'=>fake()->word(),
-            'resumen'=>fake()->word(),
-            'p_clave'=>fake()->word(),
-            'apunte'=>fake()->text(),
-            'tema_id' => $tema->id,
-            'user_id' => $user->id,
-            
-
-            //
+            'id_usuario' => $user->id,
+            'id_tema' => $tema->id,
         ];
     }
 }
